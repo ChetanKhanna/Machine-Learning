@@ -42,3 +42,43 @@ classifier.fit(X_train, y_train)
 # testing classifier accuracy on test data
 accuracy = classifier.score(X_test, y_test)
 print(accuracy)
+
+# seperating amazon data
+df_amazon = df[df['source'] == 'amazon']
+sentences = df_amazon['sentence'].values
+y = df_amazon['label'].values
+# splitting into test and train data set
+sentences_train, sentences_test, y_train, y_test = train_test_split(
+    sentences, y, test_size=0.30, random_state=1000)
+# vectorize sentences using BOW model
+vectorizer = CountVectorizer()
+# learning features
+vectorizer.fit(sentences_train)
+# transforming to array
+X_train = vectorizer.transform(sentences_train)
+X_test = vectorizer.transform(sentences_test)
+# applying logistic regression
+classifier = LogisticRegression()
+# fitting data
+classifier.fit(X_train, y_train)
+# finding accuracy
+accuracy = classifier.score(X_test, y_test)
+print(accuracy)
+
+# seperating imdb data
+df_imdb = df[df['source'] == 'imdb']
+sentences = df_imdb['sentence'].values
+y = df_imdb['label'].values
+# splitting data
+sentences_train, sentences_test, y_train, y_test = train_test_split(
+    sentences, y, test_size=0.30, random_state=1000)
+# vectorize sentence to turn into features
+vectorizer = CountVectorizer()
+vectorizer.fit(sentences_train)
+X_train = vectorizer.transform(sentences_train)
+X_test = vectorizer.transform(sentences_test)
+# making classifier
+classifier = LogisticRegression()
+classifier.fit(X_train, y_train)
+accuracy = classifier.score(X_test, y_test)
+print(accuracy)
