@@ -96,3 +96,14 @@ model.compile(
     optimizer='adam',
     metrics=['accuracy'])
 model.summary()
+# Training with Keras
+history = model.fit(
+    X_train, y_train,
+    epochs=50,
+    verbose=False,
+    validation_data=(X_test, y_test),
+    batch_size=10)
+loss, accuracy = model.evaluate(X_train, y_train, verbose=False)
+print(accuracy)
+loss, accuracy = model.evaluate(X_test, y_test, verbose=False)
+print(accuracy)
