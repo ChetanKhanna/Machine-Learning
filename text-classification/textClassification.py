@@ -2,6 +2,8 @@ import pandas as pd
 from sklearn.model_selection import train_test_split
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.linear_model import LogisticRegression
+from keras.models import Sequential
+from keras import layers
 
 # importing data
 # setting filepaths
@@ -82,3 +84,15 @@ classifier = LogisticRegression()
 classifier.fit(X_train, y_train)
 accuracy = classifier.score(X_test, y_test)
 print(accuracy)
+
+# using Keras to improve accuracy
+input_dim = X_train.shape[1]
+model = Sequential()
+model.add(layers.Dense(10, input_dim=input_dim, activation='relu'))
+model.add(layers.Dense(1, activation='sigmoid'))
+# configuring keras
+model.compile(
+    loss='binary_crossentropy',
+    optimizer='adam',
+    metrics=['accuracy'])
+model.summary()
