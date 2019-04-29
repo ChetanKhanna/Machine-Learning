@@ -4,6 +4,33 @@ from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.linear_model import LogisticRegression
 from keras.models import Sequential
 from keras import layers
+import matplotlib.pyplot as plt
+
+plt.style.use('ggplot')
+
+
+# plotting training history to get over/under fitting
+def plotHistory(history):
+    acc = history.history['acc']
+    val_acc = history.history['val_acc']
+    loss = history.history['loss']
+    val_loss = history.history['val_loss']
+    x = range(1, len(acc) + 1)
+
+    plt.figure(figsize=(12, 5))
+    plt.subplot(1, 2, 1)
+    # plotting training and validation accuracy
+    plt.plot(x, acc, 'b', label='Training acc')
+    plt.plot(x, val_acc, 'r', label='Validation acc')
+    plt.title('Training and Validation acc')
+    plt.legend()
+    # plotting training and validation loss
+    plt.subplot(1, 2, 2)
+    plt.plot(x, loss, 'b', label='Training loss')
+    plt.plot(x, val_loss, 'r', label='Validation loss')
+    plt.title('Training and Validation loss')
+    plt.legend()
+    plt.show()
 
 # importing data
 # setting filepaths
@@ -97,9 +124,10 @@ model.compile(
     metrics=['accuracy'])
 model.summary()
 # Training with Keras
+# epochs changed to 15 after verification from graph
 history = model.fit(
     X_train, y_train,
-    epochs=50,
+    epochs=15,
     verbose=False,
     validation_data=(X_test, y_test),
     batch_size=10)
@@ -107,3 +135,4 @@ loss, accuracy = model.evaluate(X_train, y_train, verbose=False)
 print(accuracy)
 loss, accuracy = model.evaluate(X_test, y_test, verbose=False)
 print(accuracy)
+plotHistory(history)
