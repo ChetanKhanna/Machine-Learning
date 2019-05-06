@@ -13,7 +13,11 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.pipeline import Pipeline
 from sklearn.metrics import mean_squared_error
 from sklearn.model_selection import train_test_split
+from sklearn.model_selection import learning_curve
 
+import matplotlib.pyplot as plt
+
+plt.style.use('seaborn')
 
 # importing data-set
 train_df = pd.read_csv('./train.csv', index_col='ID')
@@ -88,3 +92,18 @@ print('Testing accuracy:', lasso_pipeline.score(X_test, y_test))
 # Possibly because the data-set was too small and the
 # regularization was too hard for it. Not sure though, tbh.
 # try using smaller value for alpha
+
+# plotting learning curve
+training_sizes = [100, 120, 150, 200, 250]
+training_sizes, train_scores, validation_scores = learning_curve(
+                            estimator=Ridge(alpha=0.5, fit_intercept=True),
+                            X=X, y=y, train_sizes=training_sizes,
+                            cv=5, scoring='neg_mean_squared_error')
+# plotting
+train_scores_mean = -train_scores.mean(axis=1)
+validation_scores_mean = -validation_scores.mean(axis=1)
+plt.plot(training_sizes, train_scores_mean, label='TrainingError')
+plt.plot(training_sizes, validation_scores_mean, label='ValidationError')
+plt.ylim(0, 100)
+plt.legend()
+plt.show()
