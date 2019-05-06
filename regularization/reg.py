@@ -26,6 +26,17 @@ def PolynomialRegression(degree=2, **kwargs):
                          LinearRegression(**kwargs))
 
 
+# PolynomialRegression with Ridge-classifier
+def PolynomialRegression_Ridge(degree=2, **kwargs):
+    return make_pipeline(PolynomialFeatures(degree),
+                         Ridge(fit_intercept=True, **kwargs))
+
+
+def PolynomialRegression_Lasso(degree=2, **kwargs):
+    return make_pipeline(PolynomialFeatures(degree),
+                         Lasso(fit_intercept=True, **kwargs))
+
+
 # defining fuction for plotting learning curves
 def learning_curves_(estimator, X, y, train_sizes, cv, scoring):
     train_sizes, train_scores, validation_scores = learning_curve(
@@ -128,7 +139,7 @@ plt.tight_layout()
 plt.show()
 
 # plotting validation curve for deciding alpha for Ridge
-alpha_vals = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+alpha_vals = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
 train_scores, validation_scores = validation_curve(Ridge(), X,
                                                    y, 'alpha', alpha_vals,
                                                    cv=5)
@@ -152,15 +163,33 @@ plt.legend()
 plt.show()
 
 # Deciding degree for Polynomial features
-degree_vals = [1, 2, 3, 4, 5, 6, 7]
-train_scores, validation_scores = validation_curve(PolynomialRegression(), X,
-                                                   y,
-                                                   'polynomialfeatures__degree',
-                                                   degree_vals, cv=5
-                                                   )
-train_scores_mean = train_scores.mean(axis=1)
-validation_scores_mean = validation_scores.mean(axis=1)
-plt.plot(degree_vals, train_scores_mean, label='TrainingScore')
-plt.plot(degree_vals, validation_scores_mean, label='ValidationScore')
-plt.legend()
-plt.show()
+# degree_vals = [1, 2, 3, 4, 5, 6, 7]
+# train_scores, validation_scores = validation_curve(PolynomialRegression(), X,
+#                                                    y,
+#                                                    'polynomialfeatures__degree',
+#                                                    degree_vals, cv=5
+#                                                    )
+# train_scores_mean = train_scores.mean(axis=1)
+# validation_scores_mean = validation_scores.mean(axis=1)
+# plt.plot(degree_vals, train_scores_mean, label='TrainingScore')
+# plt.plot(degree_vals, validation_scores_mean, label='ValidationScore')
+# plt.legend()
+# plt.show()
+
+# Deciding alpha and degree for Ridge classifier using GridSearch
+degree_vals = [1, 2, 3, 4, 5]
+alpha_vals = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+param_grid = {'polynomialfeatures__degree': degree_vals,
+              'ridge__alpha': alpha_vals}
+grid = GridSearchCV(PolynomialRegression_Ridge(), param_grid, cv=5)
+grid.fit(X, y)
+print('Ridge best_params_ :', grid.best_params_)
+
+# Deciding alpha and degree for Lasso classifier using GridSearch
+degree_vals = [1, 2, 3, 4, 5]
+alpha_vals = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0]
+param_grid = {'polynomialfeatures__degree': degree_vals,
+              'lasso__alpha': alpha_vals}
+grid = GridSearchCV(PolynomialRegression_Lasso(), param_grid, cv=5)
+grid.fit(X, y)
+print('Lasso best_params_ :', grid.best_params_)
