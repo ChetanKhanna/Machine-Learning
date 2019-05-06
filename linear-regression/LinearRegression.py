@@ -2,6 +2,7 @@ import numpy as np
 from sklearn.linear_model import LinearRegression
 from sklearn.preprocessing import PolynomialFeatures
 
+
 # Loading training data
 fname = './single-feature.txt'
 X, y = np.loadtxt(fname, delimiter=',', unpack=True)
