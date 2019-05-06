@@ -9,4 +9,13 @@ Here are all the referenced I used for this.
 [DataConversionWarning](https://stackoverflow.com/questions/39214164/data-conversion-error-while-applying-a-function-to-each-row-in-pandas-python)
 [training-testing accuracy](https://www.researchgate.net/post/How_is_it_possible_to_obtain_better_results_on_the_test_set_than_on_the_training_set)
 
+
+I've added a few more stuff since then.
+Here are the links for references:
+
+[learning-curves](https://www.dataquest.io/blog/learning-curves-machine-learning/)
+[validation-curves](https://jakevdp.github.io/PythonDataScienceHandbook/05.03-hyperparameters-and-model-validation.html)
+[multiple paramteter optimization](https://towardsdatascience.com/hyperparameter-tuning-the-random-forest-in-python-using-scikit-learn-28d2aa77dd74)
+[error warnings](https://github.com/scikit-learn/scikit-learn/issues/11559)
+
 Hope it helps!

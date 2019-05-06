@@ -182,7 +182,8 @@ degree_vals = [1, 2, 3, 4, 5]
 alpha_vals = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
 param_grid = {'polynomialfeatures__degree': degree_vals,
               'ridge__alpha': alpha_vals}
-grid = GridSearchCV(PolynomialRegression_Ridge(), param_grid, cv=5, n_jobs=-1)
+grid = GridSearchCV(PolynomialRegression_Ridge(), param_grid, cv=5,
+                    n_jobs=-1, iid=True)
 grid.fit(X, y)
 print('Ridge best_params_ :', grid.best_params_)
 
@@ -191,7 +192,8 @@ degree_vals = [1, 2, 3, 4, 5]
 alpha_vals = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0]
 param_grid = {'polynomialfeatures__degree': degree_vals,
               'lasso__alpha': alpha_vals}
-grid = GridSearchCV(PolynomialRegression_Lasso(), param_grid, cv=5, n_jobs=-1)
+grid = GridSearchCV(PolynomialRegression_Lasso(), param_grid, cv=5,
+                    n_jobs=-1, iid=True)
 grid.fit(X, y)
 print('Lasso best_params_ :', grid.best_params_)
 
@@ -201,7 +203,7 @@ alpha_vals = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0]
 param_grid = {'polynomialfeatures__degree': degree_vals,
               'lasso__alpha': alpha_vals}
 r_grid = RandomizedSearchCV(PolynomialRegression_Lasso(), param_grid, cv=5,
-                            n_jobs=-1)
+                            n_jobs=-1, iid=True)
 r_grid.fit(X, y)
 print('Lasso best_params_ using RandomSearchCV: ', r_grid.best_params_)
 
@@ -211,6 +213,6 @@ alpha_vals = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
 param_grid = {'polynomialfeatures__degree': degree_vals,
               'ridge__alpha': alpha_vals}
 r_grid = RandomizedSearchCV(PolynomialRegression_Ridge(), param_grid,
-                            cv=5, n_jobs=-1)
+                            cv=5, n_jobs=-1,iid=True)
 r_grid.fit(X, y)
 print('Ridge best_params_ using RandomizedSearchCV:', r_grid.best_params_)
