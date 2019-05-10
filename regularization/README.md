@@ -1,4 +1,4 @@
-# Regularization using sklearn
+# Regularization, Training and Validation using sklearn
 
 I wanted to test out how regularization works in python on supervised learning models. I used sklearn for this. Earlier I have done this in MATLAB so concepts were already clear; only implementation was the new learning for me.
 
@@ -10,7 +10,7 @@ Here are all the referenced I used for this.
 [training-testing accuracy](https://www.researchgate.net/post/How_is_it_possible_to_obtain_better_results_on_the_test_set_than_on_the_training_set)
 
 
-I've added a few more stuff since then.
+I've added a few more stuff since then -- basically testing and validation part.
 Here are the links for references:
 
 [learning-curves](https://www.dataquest.io/blog/learning-curves-machine-learning/)
