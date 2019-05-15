@@ -16,6 +16,8 @@ from sklearn.model_selection import validation_curve
 from sklearn.model_selection import GridSearchCV
 from sklearn.model_selection import RandomizedSearchCV
 
+from sklearn.metrics import precision_score, recall_score
+
 import matplotlib.pyplot as plt
 
 plt.style.use('seaborn')
@@ -70,6 +72,8 @@ model = LinearRegression()
 model.fit(X_test, y_test)
 print('Training accuracy:', model.score(X_train, y_train))
 print('Testing accuracy:', model.score(X_test, y_test))
+print('precision: ', precision_score(y_test, model.predict(X_test)))
+print('recall: ', recall_score(y_test, model.predict(X_test)))
 # calculate root-mean-squared-error
 y_pred = model.predict(X_test)
 mse = mean_squared_error(y_test, y_pred)
@@ -89,6 +93,8 @@ pipeline.fit(X_train, y_train)
 print()
 print('Training accuracy:', pipeline.score(X_train, y_train))
 print('Testing accuracy:', pipeline.score(X_test, y_test))
+print('precision: ', precision_score(y_test, pipeline.predict(X_test)))
+print('recall: ', recall_score(y_test, pipeline.predict(X_test)))
 
 # NOTE: If training accuracy is too high compared to Testing accuracy
 # it signals an overfit in our training model
@@ -106,7 +112,8 @@ ridge_pipeline.fit(X_train, y_train)
 print()
 print('Training accuracy:', ridge_pipeline.score(X_train, y_train))
 print('Testing accuracy:', ridge_pipeline.score(X_test, y_test))
-
+print('precision: ', precision_score(y_test, pipeline.predict(X_test)))
+print('recall: ', recall_score(y_test, pipeline.predict(X_test)))
 # L1 or Lasso regularization
 steps = [
         ('scale', StandardScaler()),
@@ -119,7 +126,8 @@ lasso_pipeline.fit(X_train, y_train)
 print()
 print('Training accuracy:', lasso_pipeline.score(X_train, y_train))
 print('Testing accuracy:', lasso_pipeline.score(X_test, y_test))
-
+print('precision: ', precision_score(y_test, pipeline.predict(X_test)))
+print('recall: ', recall_score(y_test, pipeline.predict(X_test)))
 # NOTE:  IF The training accuracy < testing accuracy here.
 # Possibly because the data-set was too small and the
 # regularization was too hard for it. Not sure though, tbh.
