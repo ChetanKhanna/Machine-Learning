@@ -59,3 +59,49 @@ plt.contour(x_axis, y_axis, p2[:, np.newaxis].reshape(x_axis.shape),
 plt.xlim(0, 30)
 plt.ylim(0, 30)
 plt.show()
+
+
+def select_threshold(y, p):
+    '''
+    Select epsilon for outlier
+    '''
+    best_epi = 0
+    best_F1 = 0
+    stepsize = (max(p) - min(p))/1000
+    epi_range = np.arange(p.min(), p.max(), stepsize)
+    for epi in epi_range:
+        predictions = (p < epi)[:, np.newaxis]
+        true_pos = np.sum(predictions[y == 1] == 1)
+        false_pos = np.sum(predictions[y == 0] == 1)
+        false_neg = np.sum(predictions[y == 1] == 0)
+        precision = true_pos/(true_pos + false_pos)
+        recall = true_pos/(true_pos + false_neg)
+        F1 = (2*precision*recall)/(precision + recall)
+        if F1 > best_F1:
+            best_F1 = F1
+            best_epi = epi
+    return best_epi, best_F1
+
+
+p = multivariate_gaussian(Xval, mu, sigma2)
+epsilon, F1 = select_threshold(yval, p)
+print("Best epsilon found using cross-validation:", epsilon)
+print("Best F1 on Cross Validation Set:", F1)
+
+# Repeating for high dimensional dataset
+mat2 = loadmat('./ex8data2.mat')
+X2 = mat2['X']
+Xval2 = mat2['Xval']
+yval2 = mat2['yval']
+# finding mean and sigma
+mu2, sigma2_2 = eastimate_gaussian(X2)
+# traingin-set
+p_2 = multivariate_gaussian(X2, mu2, sigma2_2)
+# CV-set
+pval2 = multivariate_gaussian(Xval2, mu2, sigma2_2)
+# select the best threshold
+epsilon2, F1_2 = select_threshold(yval2, pval2)
+# results
+print('Best F1 score:', F1_2)
+print('Best epsilon on CV set:', epsilon2)
+print('Number of outliers:', np.sum(p_2 < epsilon2))
