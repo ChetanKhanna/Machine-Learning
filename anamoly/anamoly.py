@@ -3,6 +3,8 @@ import matplotlib.pyplot as plt
 from scipy.io import loadmat
 
 # loading dataset from .mat files
+# NOTE: These X are features which take on very large or very small
+# values for an anamolous example. Xval, yval are for validation set.
 mat = loadmat('./ex8data1.mat')
 X = mat['X']
 Xval = mat['Xval']
@@ -14,10 +16,10 @@ plt.ylabel('Throuput')
 plt.show()
 
 
-def eastimate_gaussian(X):
+def eastimate_gaussian_params(X):
     '''
     Estimates the gaussian distribution for each feature
-    in matrix X.
+    in matrix X -- fitting paramers mu and sigme2 on all features in X
     '''
     m = X.shape[0]
     # estimating parameters
@@ -29,10 +31,10 @@ def eastimate_gaussian(X):
     return mu, var
 
 
-mu, sigma2 = eastimate_gaussian(X)
+mu, sigma2 = eastimate_gaussian_params(X)
 
 
-def multivariate_gaussian(X, mu, sigma2):
+def find_probability(X, mu, sigma2):
     '''
     computes the probability density of X under
     multivariate gaussian.
@@ -45,14 +47,14 @@ def multivariate_gaussian(X, mu, sigma2):
     return p
 
 
-p = multivariate_gaussian(X, mu, sigma2)
+p = find_probability(X, mu, sigma2)
 # plotting contours
 plt.figure(figsize=(8, 6))
 plt.scatter(X[:, 0], X[:, 1], marker='x')
 x_axis, y_axis = np.meshgrid(np.linspace(0, 35, num=70),
                              np.linspace(0, 35, num=70))
-p2 = multivariate_gaussian(np.hstack((x_axis.flatten()[:, np.newaxis],
-                           y_axis.flatten()[:, np.newaxis])), mu, sigma2)
+p2 = find_probability(np.hstack((x_axis.flatten()[:, np.newaxis],
+                      y_axis.flatten()[:, np.newaxis])), mu, sigma2)
 contour_level = 10**np.array([np.arange(-2, 0, 3, dtype=np.float)]).T
 plt.contour(x_axis, y_axis, p2[:, np.newaxis].reshape(x_axis.shape),
             [-0.5, 0.0048, 0.267, 0.329, 1, 1.5, 2.6, 5])
@@ -64,6 +66,9 @@ plt.show()
 def select_threshold(y, p):
     '''
     Select epsilon for outlier
+    This also acts as an evaluation metric for anamoly detection
+    algorithm. Check it for different X's and judge on F1 score returned
+    as to which combination of features in X is best suited.
     '''
     best_epi = 0
     best_F1 = 0
@@ -83,7 +88,7 @@ def select_threshold(y, p):
     return best_epi, best_F1
 
 
-p = multivariate_gaussian(Xval, mu, sigma2)
+p = find_probability(Xval, mu, sigma2)
 epsilon, F1 = select_threshold(yval, p)
 print("Best epsilon found using cross-validation:", epsilon)
 print("Best F1 on Cross Validation Set:", F1)
@@ -94,11 +99,11 @@ X2 = mat2['X']
 Xval2 = mat2['Xval']
 yval2 = mat2['yval']
 # finding mean and sigma
-mu2, sigma2_2 = eastimate_gaussian(X2)
+mu2, sigma2_2 = eastimate_gaussian_params(X2)
 # traingin-set
-p_2 = multivariate_gaussian(X2, mu2, sigma2_2)
+p_2 = find_probability(X2, mu2, sigma2_2)
 # CV-set
-pval2 = multivariate_gaussian(Xval2, mu2, sigma2_2)
+pval2 = find_probability(Xval2, mu2, sigma2_2)
 # select the best threshold
 epsilon2, F1_2 = select_threshold(yval2, pval2)
 # results
