@@ -1,10 +1,13 @@
+from os.path import expanduser, join
 import numpy as np
 from sklearn.linear_model import LinearRegression
 from sklearn.preprocessing import PolynomialFeatures
 
 
 # Loading training data
-fname = './single-feature.txt'
+HOME = expanduser('~')
+path = 'Machine Learning/linear-regression'
+fname = join(HOME, path, './single-feature.txt')
 X, y = np.loadtxt(fname, delimiter=',', unpack=True)
 X = X.reshape(-1, 1)
 y = y.reshape(-1, 1)
@@ -21,7 +24,7 @@ print(model.score(X, y))
 print(model.predict(np.array([3.5, 7.0]).reshape(-1, 1)))
 
 # Multi-feature training set
-fname = './multi-feature.txt'
+fname = join(HOME, path, './multi-feature.txt')
 X1, X2, y = np.loadtxt(fname, delimiter=',', unpack=True)
 # X = np.hstack((X1, X2))
 X = np.c_[X1, X2]
