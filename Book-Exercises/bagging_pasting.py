@@ -4,6 +4,7 @@ from sklearn.preprocessing import LabelEncoder, OneHotEncoder
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.ensemble import BaggingClassifier
 from sklearn.metrics import accuracy_score
+from sklearn.ensemble import RandomForestClassifier, ExtraTreesClassifier
 
 
 df = pd.read_csv('./spam.csv', encoding='latin-1')
@@ -38,3 +39,26 @@ print('Training model..')
 bag_clf_2.fit(X_train, y_train)
 print('Done')
 print('oob score:', bag_clf_2.oob_score_)
+print('Making predictions..')
+y_pred = bag_clf_2.predict(X_test)
+print('Accuracy:', accuracy_score(y_test, y_pred))
+RandomForest Classifier
+rf_clf = RandomForestClassifier(n_estimators=50, bootstrap=True,
+                                max_leaf_nodes=16, n_jobs=-1, oob_score=True)
+print('Training model..')
+rf_clf.fit(X_train, y_train)
+print('Done.')
+print('oob score:', rf_clf.oob_score_)
+print('Making predictions..')
+y_pred = rf_clf.predict(X_test)
+print('Accuracy:', accuracy_score(y_test, y_pred))
+# ExtraTree Classifier
+ext_clf = ExtraTreesClassifier(n_estimators=50, bootstrap=True,
+                               max_leaf_nodes=16, n_jobs=-1, oob_score=True)
+print('Training model..')
+ext_clf.fit(X_train, y_train)
+print('Done.')
+print('oob score:', ext_clf.oob_score_)
+print('Making predictions..')
+y_pred = ext_clf.predict(X_test)
+print('Accuracy:', accuracy_score(y_test, y_pred))
